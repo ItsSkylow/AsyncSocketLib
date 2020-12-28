@@ -10,21 +10,17 @@ import fr.itssky.asyncsocketlib.server.IHost;
  * @project AsyncSocketLib
  */
 public class AsyncHostStartTask<T> extends AsyncHostTask<T> {
-    private final int port;
-
     /**
      * Instantiates a new Async host start task.
      *
      * @param host the host
-     * @param port the port
      */
-    public AsyncHostStartTask(IHost<T> host, int port) {
+    public AsyncHostStartTask(IHost<T> host) {
         super(host);
-        this.port = port;
     }
 
     @Override
     public void run() {
-        this.host.start(this.port);
+        this.host.start();
     }
 }

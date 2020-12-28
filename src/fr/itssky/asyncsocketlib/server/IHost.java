@@ -10,10 +10,8 @@ package fr.itssky.asyncsocketlib.server;
 public interface IHost<T> {
     /**
      * Start.
-     *
-     * @param port the port
      */
-    public void start(int port);
+    public void start();
 
     /**
      * Stop.
@@ -31,4 +29,11 @@ public interface IHost<T> {
      * Read message.
      */
     public void readMessage();
+
+    /**
+     * Gets ip.
+     *
+     * @return the ip
+     */
+    public String getIp();
 }

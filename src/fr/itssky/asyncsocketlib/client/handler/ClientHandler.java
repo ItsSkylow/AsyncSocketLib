@@ -55,9 +55,12 @@ public class ClientHandler implements IClientHandler<String> {
 
     @Override
     public String getData() throws NullDataException {
-        if(data == null)
+        try {
+            Thread.sleep(1);
+            return data;
+        } catch (InterruptedException e) {
             throw new NullDataException();
-        return data;
+        }
     }
 
 }

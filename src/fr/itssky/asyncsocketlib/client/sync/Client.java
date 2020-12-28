@@ -5,6 +5,7 @@ import fr.itssky.asyncsocketlib.client.handler.IClientHandler;
 import fr.itssky.asyncsocketlib.exception.ClientException;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -19,7 +20,7 @@ public class Client implements IClient<String> {
     private Socket socket;
 
     // Flux
-    private BufferedWriter out;
+    private PrintWriter out;
     private BufferedReader in;
 
     // Infos
@@ -36,12 +37,17 @@ public class Client implements IClient<String> {
 
     @Override
     public void connect(int port, String ip, int timeout) {
+        InetSocketAddress addr;
+
         try {
             // set the socket & attempt to connect
+            this.socket = new Socket();
             this.socket.connect(new InetSocketAddress(ip, port), timeout);
+
             // Initialisation of flux (in & out)
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            out = new PrintWriter(socket.getOutputStream());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             // Notify handler that client is connect
             this.handler.didConnect();
         } catch (IOException e) {
@@ -68,15 +74,11 @@ public class Client implements IClient<String> {
 
     @Override
     public void sendMessage(String message) {
-        try {
-            // Send data
-            this.out.write(message);
-            // Notify handler that all goes perfectly
-            this.handler.didSendData(message);
-        } catch (IOException e) {
-            // Notify handler that something goes wrong
-            this.handler.didSendData(null);
-        }
+        // Send data
+        this.out.println(message);
+        this.out.flush();
+        // Notify handler that all goes perfectly
+        this.handler.didSendData(message);
     }
 
     @Override

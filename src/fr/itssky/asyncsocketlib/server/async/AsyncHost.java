@@ -1,13 +1,10 @@
 package fr.itssky.asyncsocketlib.server.async;
 
 import fr.itssky.asyncsocketlib.exception.HostException;
+import fr.itssky.asyncsocketlib.server.asynctasks.*;
 import fr.itssky.asyncsocketlib.server.handler.IHostHandler;
 import fr.itssky.asyncsocketlib.server.sync.Host;
 import fr.itssky.asyncsocketlib.server.IHost;
-import fr.itssky.asyncsocketlib.server.asynctasks.AsyncHostReadTask;
-import fr.itssky.asyncsocketlib.server.asynctasks.AsyncHostSendTask;
-import fr.itssky.asyncsocketlib.server.asynctasks.AsyncHostStartTask;
-import fr.itssky.asyncsocketlib.server.asynctasks.AsyncHostStopTask;
 
 /**
  * The type Async host.
@@ -30,8 +27,8 @@ public class AsyncHost implements IHost<String> {
     }
 
     @Override
-    public void start(int port) {
-        this.task = new Thread(new AsyncHostStartTask<>(this.host, this.host.getPort()));
+    public void start() {
+        this.task = new Thread(new AsyncHostStartTask<>(this.host));
         // Start the host
         this.task.start();
     }
@@ -74,5 +71,10 @@ public class AsyncHost implements IHost<String> {
         } catch (InterruptedException e) {
             this.host.getHandler().didReceiveData(null);
         }
+    }
+
+    @Override
+    public String getIp() {
+        return this.host.getIp();
     }
 }
